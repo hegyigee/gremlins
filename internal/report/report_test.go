@@ -206,9 +206,15 @@ func TestAssessment(t *testing.T) {
 			expectError: true,
 		},
 		{
-			name:        "efficacy >= efficacy-threshold",
+			name:        "efficacy == efficacy-threshold",
 			confKey:     configuration.UnleashThresholdEfficacyKey,
 			value:       float64(50),
+			expectError: false,
+		},
+		{
+			name:        "efficacy > efficacy-threshold",
+			confKey:     configuration.UnleashThresholdEfficacyKey,
+			value:       49.99,
 			expectError: false,
 		},
 		{
@@ -232,9 +238,15 @@ func TestAssessment(t *testing.T) {
 			expectError: true,
 		},
 		{
-			name:        "coverage >= coverage-threshold",
+			name:        "coverage == coverage-threshold",
 			confKey:     configuration.UnleashThresholdMCoverageKey,
 			value:       float64(50),
+			expectError: false,
+		},
+		{
+			name:        "coverage > coverage-threshold",
+			confKey:     configuration.UnleashThresholdMCoverageKey,
+			value:       49.99,
 			expectError: false,
 		},
 		{
@@ -279,6 +291,9 @@ func TestAssessment(t *testing.T) {
 				t.Fatal("expected an error")
 			}
 			if !tc.expectError {
+				if err != nil {
+					t.Fatalf("not expected an error but got one: %v", err)
+				}
 				return
 			}
 			var exitErr *execution.ExitError
