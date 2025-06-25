@@ -287,15 +287,10 @@ func TestAssessment(t *testing.T) {
 
 			err := report.Do(data)
 
-			if tc.expectError && err == nil {
-				t.Fatal("expected an error")
-			}
-			if !tc.expectError {
-				if err != nil {
-					t.Fatalf("not expected an error but got one: %v", err)
-				}
+			if errorAsExpected(t, tc.expectError, err) {
 				return
 			}
+
 			var exitErr *execution.ExitError
 			if errors.As(err, &exitErr) {
 				if exitErr.ExitCode() == 0 {
@@ -306,6 +301,22 @@ func TestAssessment(t *testing.T) {
 			}
 		})
 	}
+}
+
+func errorAsExpected(t *testing.T, expectError bool, err error) bool {
+	errorPresent := err != nil
+
+	if expectError && !errorPresent {
+		t.Fatal("expected an error")
+		return false
+	}
+
+	if !expectError && errorPresent {
+		t.Fatalf("not expected an error but got one: %v", err)
+		return false
+	}
+
+	return true
 }
 
 func TestMutantLog(t *testing.T) {
