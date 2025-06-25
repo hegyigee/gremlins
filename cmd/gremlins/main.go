@@ -32,7 +32,7 @@ import (
 	"github.com/go-gremlins/gremlins/internal/log"
 )
 
-var version = "dev"
+var version = "0.5.1"
 
 func main() {
 	var exitErr *execution.ExitError

@@ -567,6 +567,7 @@ func TestSkipTestAndNonGoFiles(t *testing.T) {
 
 	sys := fstest.MapFS{
 		"file_test.go": {Data: file},
+		"file_mock.go": {Data: file},
 		"folder1/file": {Data: file},
 	}
 	mod := gomodule.GoModule{

@@ -101,7 +101,8 @@ func (mu *Engine) Run(ctx context.Context) report.Results {
 	go func() {
 		defer close(mu.mutantStream)
 		_ = fs.WalkDir(mu.fs, ".", func(path string, _ fs.DirEntry, _ error) error {
-			isGoCode := filepath.Ext(path) == ".go" && !strings.HasSuffix(path, "_test.go")
+			isGoCode := filepath.Ext(path) == ".go" && !strings.HasSuffix(path, "_test.go") &&
+				!strings.HasSuffix(path, "_mock.go")
 
 			if isGoCode && !mu.codeData.Exclusion.IsFileExcluded(path) {
 				mu.runOnFile(path)
