@@ -180,7 +180,7 @@ func (m *mutantExecutor) Start(w *workerpool.Worker) {
 		return
 	}
 
-	m.mutant.SetStatus(m.runTests(rootDir, m.mutant.Pkg()))
+	m.mutant.SetStatus(m.runTests(rootDir))
 
 	if err := m.mutant.Rollback(); err != nil {
 		// What should we do now?
@@ -190,11 +190,11 @@ func (m *mutantExecutor) Start(w *workerpool.Worker) {
 	m.outCh <- m.mutant
 }
 
-func (m *mutantExecutor) runTests(rootDir, pkg string) mutator.Status {
+func (m *mutantExecutor) runTests(rootDir string) mutator.Status {
 	ctx, cancel := context.WithTimeout(context.Background(), m.testExecutionTime)
 	defer cancel()
 
-	cmd := m.execContext(ctx, "go", m.getTestArgs(pkg)...)
+	cmd := m.execContext(ctx, "go", m.getTestArgs()...)
 	cmd.Dir = m.mutant.Workdir()
 	if m.integrationMode {
 		cmd.Dir = rootDir
@@ -216,7 +216,7 @@ func (m *mutantExecutor) runTests(rootDir, pkg string) mutator.Status {
 	return mutator.Lived
 }
 
-func (m *mutantExecutor) getTestArgs(pkg string) []string {
+func (m *mutantExecutor) getTestArgs() []string {
 	args := []string{"test"}
 	if m.buildTags != "" {
 		args = append(args, "-tags", m.buildTags)
@@ -231,7 +231,7 @@ func (m *mutantExecutor) getTestArgs(pkg string) []string {
 		args = append(args, fmt.Sprintf("-cpu %d", m.testCPU))
 	}
 
-	path := pkg
+	path := `.`
 	if m.integrationMode {
 		path = "./..."
 	}
