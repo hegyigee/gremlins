@@ -243,7 +243,7 @@ func TestMutatorRun(t *testing.T) {
 			pkg:      "example.com/my/package",
 			callDir:  "test/dir",
 			tags:     "tag1,t1g2",
-			wantPath: ".",
+			wantPath: "example.com/my/package",
 		},
 		{
 			name:     "integration mode",
@@ -259,7 +259,7 @@ func TestMutatorRun(t *testing.T) {
 			pkg:                "example.com/my/package",
 			callDir:            "test/dir",
 			tags:               "tag1,t1g2",
-			wantPath:           ".",
+			wantPath:           "example.com/my/package",
 		},
 	}
 	for _, tc := range testCases {
