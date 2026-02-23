@@ -14,6 +14,7 @@
  *    limitations under the License.
  */
 
+// Package engine orchestrates mutation testing by discovering, applying, and testing mutations.
 package engine
 
 import (
@@ -146,7 +147,7 @@ func (mu *Engine) findMutations(fileName string, set *token.FileSet, file *ast.F
 	pkg := mu.pkgName(fileName, file.Name.Name)
 	for _, mt := range mutantTypes {
 		if !configuration.Get[bool](configuration.MutantTypeEnabledKey(mt)) {
-			return
+			continue
 		}
 		mutantType := mt
 		tm := NewTokenMutant(pkg, set, file, node)

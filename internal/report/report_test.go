@@ -122,7 +122,7 @@ func TestReport(t *testing.T) {
 			got := out.String()
 
 			if !cmp.Equal(got, tc.want) {
-				t.Errorf(cmp.Diff(tc.want, got))
+				t.Error(cmp.Diff(tc.want, got))
 			}
 		})
 	}
@@ -176,7 +176,7 @@ func TestReport(t *testing.T) {
 			got := out.String()
 
 			if !cmp.Equal(got, tc.want) {
-				t.Errorf(cmp.Diff(tc.want, got))
+				t.Error(cmp.Diff(tc.want, got))
 			}
 		})
 	}
@@ -352,7 +352,7 @@ func TestMutantLog(t *testing.T) {
 		"     SKIPPED CONDITIONALS_BOUNDARY at aFolder/aFile.go:12:3\n"
 
 	if !cmp.Equal(got, want) {
-		t.Errorf(cmp.Diff(got, want))
+		t.Error(cmp.Diff(got, want))
 	}
 }
 
@@ -391,6 +391,7 @@ func TestReportToFile(t *testing.T) {
 			t.Fatal("error not expected")
 		}
 
+		//nolint:gosec // test code reading test output file
 		file, err := os.ReadFile(output)
 		if err != nil {
 			t.Fatal("file not found")
@@ -403,7 +404,7 @@ func TestReportToFile(t *testing.T) {
 		}
 
 		if !cmp.Equal(got, want, cmpopts.SortSlices(sortOutputFile), cmpopts.SortSlices(sortMutation)) {
-			t.Errorf(cmp.Diff(got, want))
+			t.Error(cmp.Diff(got, want))
 		}
 	})
 
@@ -415,6 +416,7 @@ func TestReportToFile(t *testing.T) {
 			t.Fatal("error not expected")
 		}
 
+		//nolint:gosec // test code reading test output
 		_, err := os.ReadFile(output)
 		if err == nil {
 			t.Errorf("expected file not found")
@@ -433,6 +435,7 @@ func TestReportToFile(t *testing.T) {
 			t.Fatal("error not expected")
 		}
 
+		//nolint:gosec // test code reading test output
 		_, err := os.ReadFile(output)
 		if err == nil {
 			t.Errorf("expected file not found")
